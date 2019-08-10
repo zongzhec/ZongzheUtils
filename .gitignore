@@ -15,3 +15,10 @@
 .idea/vcs.xml
 .idea/workspace.xml
 .idea/uiDesigner.xml
+.gradle/4.10.3/fileContent/fileContent.lock
+.gradle/4.10.3/javaCompile/javaCompile.lock
+.gradle/4.10.3/javaCompile/taskHistory.bin
+src/.idea/modules.xml
+src/.idea/src.iml
+src/.idea/vcs.xml
+src/.idea/workspace.xml
