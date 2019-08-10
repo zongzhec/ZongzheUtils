@@ -1,4 +1,4 @@
-package foo.zongzhe.utils;
+package foo.zongzhe.common.utils;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;

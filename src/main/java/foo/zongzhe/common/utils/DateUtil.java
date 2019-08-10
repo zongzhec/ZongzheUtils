@@ -1,4 +1,4 @@
-package foo.zongzhe.utils;
+package foo.zongzhe.common.utils;
 
 public class DateUtil {
 
