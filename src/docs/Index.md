@@ -16,3 +16,11 @@ All utilities are tested via Junit tests.
 ### LogUtil
 Enables log to output timestamp (basing on lcoal machine), this will be useful for investigating time consuming. 
 
+**printInfo:** print info message.
+
+**printError:** print error message.
+
+**printDebug:** print debug message.
+
+### StringUtil
+**isEmpty:** check an input string in null or empty. 
