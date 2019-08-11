@@ -3,11 +3,8 @@ package foo.zongzhe.file.utils;
 import foo.zongzhe.common.utils.LogUtil;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.poi.openxml4j.exceptions.InvalidFormatException;
-import org.apache.poi.ss.usermodel.DataFormatter;
-import org.apache.poi.ss.usermodel.Sheet;
-import org.apache.poi.ss.usermodel.Workbook;
+import org.apache.poi.ss.usermodel.*;
 
-import org.apache.poi.ss.usermodel.WorkbookFactory;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.web.multipart.MultipartFile;
@@ -34,7 +31,7 @@ public class ExcelUtil {
     public void readExcelValues(String filePath, int sheetNum) throws IOException, InvalidFormatException {
         ClassLoader classLoader = Thread.currentThread().getContextClassLoader();
         InputStream is = classLoader.getResourceAsStream(filePath);
-        List<List> contents = new ArrayList<>();
+
         Workbook wb = new XSSFWorkbook(is);
         LogUtil.printInfo("Workbook contains sheetNum: " + wb.getNumberOfSheets());
 
@@ -42,11 +39,25 @@ public class ExcelUtil {
         // Create a DataFormatter to format and get each cell's value as String
         DataFormatter dataFormatter = new DataFormatter();
         Sheet sheet = wb.getSheetAt(sheetNum);
+        // Get row number and col number from the sheet
+        int rows = sheet.getLastRowNum();
+        int cols = 0;
+        for (int i = 1; i <= rows; i++) {
+            Row row = sheet.getRow(i);
+            if (null != row) {
+                int col = row.getLastCellNum();
+                cols = Math.max(cols, col);
+            }
+        }
+        LogUtil.printInfo(String.format("row number: %d, col number: %d", rows, cols));
         sheet.forEach(row -> {
-            row.forEach(cell -> {
-                String cellValue = dataFormatter.formatCellValue(cell);
-                LogUtil.printInfo(cellValue);
-            });
+            if (null != row) {
+                row.forEach(cell -> {
+                    String cellValue = dataFormatter.formatCellValue(cell);
+                    LogUtil.printInfo(cellValue);
+                });
+            }
+
         });
 
 

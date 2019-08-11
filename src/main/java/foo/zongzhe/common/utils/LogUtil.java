@@ -21,6 +21,10 @@ public class LogUtil {
         log(msg, INFO);
     }
 
+    public static void printDebug(String msg) {
+        log(msg, DEBUG);
+    }
+
     public static void printError(String msg) {
         log(msg, ERROR);
     }
