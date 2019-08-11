@@ -22,5 +22,12 @@ Enables log to output timestamp (basing on lcoal machine), this will be useful f
 
 **printDebug:** print debug message.
 
+**printEnter:** print enter to finish the current line.
+
 ### StringUtil
 **isEmpty:** check an input string in null or empty. 
+
+## File Utils
+
+### ExcelUtils
+**readExcelValues:** read contents from excel file and returns a two-dimension array of string. 

@@ -28,4 +28,8 @@ public class LogUtil {
     public static void printError(String msg) {
         log(msg, ERROR);
     }
+
+    public static void printEnter() {
+        System.out.println();
+    }
 }

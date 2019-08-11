@@ -1,6 +1,7 @@
 package foo.zongzhe.file.utils;
 
 import foo.zongzhe.common.utils.LogUtil;
+import foo.zongzhe.common.utils.StringUtil;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.poi.openxml4j.exceptions.InvalidFormatException;
 import org.apache.poi.ss.usermodel.*;
@@ -28,7 +29,7 @@ public class ExcelUtil {
      * @throws java.io.IOException    when file is unable to parse.
      * @throws InvalidFormatException when the format is invalid.
      */
-    public void readExcelValues(String filePath, int sheetNum) throws IOException, InvalidFormatException {
+    public String[][] readExcelValues(String filePath, int sheetNum) throws IOException, InvalidFormatException {
         ClassLoader classLoader = Thread.currentThread().getContextClassLoader();
         InputStream is = classLoader.getResourceAsStream(filePath);
 
@@ -40,9 +41,9 @@ public class ExcelUtil {
         DataFormatter dataFormatter = new DataFormatter();
         Sheet sheet = wb.getSheetAt(sheetNum);
         // Get row number and col number from the sheet
-        int rows = sheet.getLastRowNum();
+        int rows = sheet.getLastRowNum() + 1; // rows starts wuith 0
         int cols = 0;
-        for (int i = 1; i <= rows; i++) {
+        for (int i = 0; i < rows; i++) {
             Row row = sheet.getRow(i);
             if (null != row) {
                 int col = row.getLastCellNum();
@@ -50,17 +51,23 @@ public class ExcelUtil {
             }
         }
         LogUtil.printInfo(String.format("row number: %d, col number: %d", rows, cols));
-        sheet.forEach(row -> {
-            if (null != row) {
-                row.forEach(cell -> {
-                    String cellValue = dataFormatter.formatCellValue(cell);
-                    LogUtil.printInfo(cellValue);
-                });
+        // Initialize return values.
+        String[][] contents = new String[rows][cols];
+        for (int i = 0; i < rows; i++) {
+            for (int j = 0; j < cols; j++) {
+                contents[i][j] = StringUtil.BLANK;
             }
-
-        });
-
-
+        }
+        for (int i = 0; i < rows; i++) {
+            Row row = sheet.getRow(i);
+            if (null != row) {
+                for (int j = 0; j < cols; j++) {
+                    String cellValue = dataFormatter.formatCellValue(row.getCell(j));
+                    if (!StringUtil.isEmpty(cellValue)) contents[i][j] = cellValue;
+                }
+            }
+        }
+        return contents;
     }
 
     /**
