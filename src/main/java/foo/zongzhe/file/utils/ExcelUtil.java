@@ -7,14 +7,10 @@ import org.apache.poi.openxml4j.exceptions.InvalidFormatException;
 import org.apache.poi.ss.usermodel.*;
 
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
-import org.springframework.core.io.ClassPathResource;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.ArrayList;
-import java.util.List;
 
 public class ExcelUtil {
 
@@ -34,9 +30,9 @@ public class ExcelUtil {
         InputStream is = classLoader.getResourceAsStream(filePath);
 
         Workbook wb = new XSSFWorkbook(is);
-        LogUtil.printInfo("Workbook contains sheetNum: " + wb.getNumberOfSheets());
+        LogUtil.logInfo("Workbook contains sheetNum: " + wb.getNumberOfSheets());
 
-        LogUtil.printInfo("Getting info from excel");
+        LogUtil.logInfo("Getting info from excel");
         // Create a DataFormatter to format and get each cell's value as String
         DataFormatter dataFormatter = new DataFormatter();
         Sheet sheet = wb.getSheetAt(sheetNum);
@@ -50,7 +46,7 @@ public class ExcelUtil {
                 cols = Math.max(cols, col);
             }
         }
-        LogUtil.printInfo(String.format("row number: %d, col number: %d", rows, cols));
+        LogUtil.logInfo(String.format("row number: %d, col number: %d", rows, cols));
         // Initialize return values.
         String[][] contents = new String[rows][cols];
         for (int i = 0; i < rows; i++) {
@@ -82,7 +78,7 @@ public class ExcelUtil {
         InputStream is = file.getInputStream();
         // Apply different Workbook basing on different extention
         String ext = fileName.substring(fileName.indexOf('.'));
-        LogUtil.printInfo("file ext is: " + ext);
+        LogUtil.logInfo("file ext is: " + ext);
         switch (ext) {
             case XLS:
                 wb = new HSSFWorkbook(is);
@@ -91,7 +87,7 @@ public class ExcelUtil {
                 wb = new XSSFWorkbook(is);
                 break;
             default:
-                LogUtil.printError("Invalid file ext.");
+                LogUtil.logError("Invalid file ext.");
         }
 
         return wb;

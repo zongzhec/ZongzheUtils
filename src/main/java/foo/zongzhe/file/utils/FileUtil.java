@@ -13,7 +13,7 @@ public class FileUtil {
     public static boolean fileExists(File file) {
         boolean fileExists = false;
         if (null == file) {
-            LogUtil.printInfo("File does not exist! " + file.getName());
+            LogUtil.logInfo("File does not exist! " + file.getName());
             fileExists = false;
         }
         return fileExists;

@@ -18,7 +18,7 @@ public class ExcelUtilTest {
             for (String s : content) {
                 System.out.print(s + " | ");
             }
-            LogUtil.printEnter();
+            LogUtil.logNextLine();
         }
     }
 }

@@ -17,19 +17,19 @@ public class LogUtil {
         System.out.println(String.join(" ", dateStr, logType, msg));
     }
 
-    public static void printInfo(String msg) {
+    public static void logInfo(String msg) {
         log(msg, INFO);
     }
 
-    public static void printDebug(String msg) {
+    public static void logDebug(String msg) {
         log(msg, DEBUG);
     }
 
-    public static void printError(String msg) {
+    public static void logError(String msg) {
         log(msg, ERROR);
     }
 
-    public static void printEnter() {
+    public static void logNextLine() {
         System.out.println();
     }
 }
