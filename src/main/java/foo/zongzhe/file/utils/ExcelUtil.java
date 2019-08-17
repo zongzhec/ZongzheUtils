@@ -23,9 +23,8 @@ public class ExcelUtil {
      * @param filePath Path of the file.
      * @param sheetNum The index number of sheet to read.
      * @throws java.io.IOException    when file is unable to parse.
-     * @throws InvalidFormatException when the format is invalid.
      */
-    public String[][] readExcelValues(String filePath, int sheetNum) throws IOException, InvalidFormatException {
+    public String[][] readExcelValues(String filePath, int sheetNum) throws IOException {
         ClassLoader classLoader = Thread.currentThread().getContextClassLoader();
         InputStream is = classLoader.getResourceAsStream(filePath);
 

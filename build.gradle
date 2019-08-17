@@ -7,17 +7,14 @@ buildscript {
     }
 }
 
-plugins {
-    id 'java'
-}
-
 apply plugin: 'java'
 apply plugin: 'eclipse'
 apply plugin: 'org.springframework.boot'
 apply plugin: 'io.spring.dependency-management'
+apply plugin: 'maven-publish'
 
 group 'zongzhe'
-version '1.0-SNAPSHOT'
+version '1.0'
 
 sourceCompatibility = 1.8
 
@@ -45,3 +42,27 @@ task sourcesJar(type: Jar, dependsOn: classes) {
 }
 
 buildDir = '../libs'
+
+afterEvaluate { project ->
+    tasks.all { Task task ->
+        if (task.name.equalsIgnoreCase('publishPatchLibPublicationToMavenLocal')) {
+            task.dependsOn tasks.getByName('assemble')
+        }
+    }
+}
+
+def localMavenRepo = 'file://' + new File(System.getProperty('user.home'), '.m2/repository').absolutePath
+
+publishing {
+    publications {
+        PatchLib(MavenPublication) {
+            from components.java
+            println(String.format("group: %s, name: %s, version: %s", project.getGroup(), project.getName(), project.getVersion()))
+            println(String.format("localMavenRepo: %s", localMavenRepo))
+        }
+    }
+}
+
+task pushlishLibToLocal(dependsOn: ['build', 'publishPatchLibPublicationToMavenLocal']) {
+    group = 'patch'
+}
