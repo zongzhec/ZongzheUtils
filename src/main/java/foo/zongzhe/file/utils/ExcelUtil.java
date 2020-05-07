@@ -9,6 +9,8 @@ import org.apache.poi.ss.usermodel.*;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 
@@ -22,11 +24,14 @@ public class ExcelUtil {
      *
      * @param filePath Path of the file.
      * @param sheetNum The index number of sheet to read.
-     * @throws java.io.IOException    when file is unable to parse.
+     * @throws java.io.IOException when file is unable to parse.
      */
     public String[][] readExcelValues(String filePath, int sheetNum) throws IOException {
         ClassLoader classLoader = Thread.currentThread().getContextClassLoader();
         InputStream is = classLoader.getResourceAsStream(filePath);
+        if (is == null) {
+            is = new FileInputStream(filePath);
+        }
 
         Workbook wb = new XSSFWorkbook(is);
         LogUtil.logInfo("Workbook contains sheetNum: " + wb.getNumberOfSheets());
@@ -68,28 +73,60 @@ public class ExcelUtil {
     /**
      * Get workbook from file
      *
-     * @param file the file to be parsed.
+     * @param fileName the file to be parsed.
      * @throws java.io.IOException when file is unable to parse.
      */
-    public static Workbook getWorkbook(MultipartFile file) throws IOException {
-        String fileName = file.getOriginalFilename();
+    public static Workbook getWorkbook(String fileName) throws IOException {
         Workbook wb = null;
-        InputStream is = file.getInputStream();
+//        InputStream is = file.getInputStream();
         // Apply different Workbook basing on different extention
-        String ext = fileName.substring(fileName.indexOf('.'));
+        String ext = fileName.substring(fileName.indexOf('.') + 1);
         LogUtil.logInfo("file ext is: " + ext);
         switch (ext) {
             case XLS:
-                wb = new HSSFWorkbook(is);
+                wb = new HSSFWorkbook();
                 break;
             case XLSX:
-                wb = new XSSFWorkbook(is);
+                wb = new XSSFWorkbook();
                 break;
             default:
                 LogUtil.logError("Invalid file ext.");
         }
 
         return wb;
+    }
+
+    public static void writeToExcel(String filePath, String[] excelTitle, String[][] contents, String sheetName)
+            throws IOException {
+        LogUtil.logInfo("Writing into Excel via " + filePath);
+        Workbook workbook = getWorkbook(filePath);
+        // Create Sheet
+        Sheet sheet = workbook.createSheet(sheetName);
+        int rowIndex = 0;
+
+        // Write row title
+        Row titleRow = sheet.createRow(rowIndex);
+        for (int i = 0; i < excelTitle.length; i++) {
+            titleRow.createCell(i).setCellValue(excelTitle[i]);
+        }
+        rowIndex++;
+
+        // Write contents
+        for (int i = 0; i < contents.length; i++) {
+            int colIndex = 0;
+            String[] contentRow = contents[i];
+            Row row = sheet.createRow(rowIndex);
+            for (int j = 0; j < contentRow.length; j++) {
+                row.createCell(colIndex).setCellValue(contentRow[j]);
+                colIndex++;
+            }
+            rowIndex++;
+        }
+
+        FileOutputStream fos = new FileOutputStream(filePath);
+        workbook.write(fos);
+        fos.close();
+        LogUtil.logInfo("Write Excel completed.");
     }
 
 }
