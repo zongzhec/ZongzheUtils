@@ -18,7 +18,7 @@ public class IntegerUtil {
      * @param pattern
      * @return
      */
-    public Integer LocalDateTimeToInt(LocalDateTime input, String pattern){
+    public Integer localDateTimeToInt(LocalDateTime input, String pattern){
         String dateStr = input.format(DateTimeFormatter.ofPattern(pattern));
         return Integer.valueOf(dateStr);
     }
