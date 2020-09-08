@@ -1,6 +1,6 @@
-package foo.zongzhe.comon.utils;
+package foo.zongzhe.utils.comon;
 
-import foo.zongzhe.common.utils.LogUtil;
+import foo.zongzhe.utils.common.LogUtil;
 import org.junit.Test;
 
 public class LogUtilTest {

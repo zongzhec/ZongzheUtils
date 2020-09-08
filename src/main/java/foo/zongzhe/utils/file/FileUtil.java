@@ -1,6 +1,6 @@
-package foo.zongzhe.file.utils;
+package foo.zongzhe.utils.file;
 
-import foo.zongzhe.common.utils.LogUtil;
+import foo.zongzhe.utils.common.LogUtil;
 
 import java.io.*;
 import java.util.ArrayList;

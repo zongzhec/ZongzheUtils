@@ -1,4 +1,4 @@
-package foo.zongzhe.data_structure.array;
+package foo.zongzhe.utils.data_structure.array;
 
 
 public class ArrayUtil {

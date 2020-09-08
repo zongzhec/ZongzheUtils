@@ -1,6 +1,6 @@
-package foo.zongzhe.file.utils;
+package foo.zongzhe.utils.file;
 
-import foo.zongzhe.common.utils.LogUtil;
+import foo.zongzhe.utils.common.LogUtil;
 import org.apache.poi.openxml4j.exceptions.InvalidFormatException;
 import org.junit.Test;
 

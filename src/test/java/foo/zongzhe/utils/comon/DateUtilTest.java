@@ -1,6 +1,6 @@
-package foo.zongzhe.comon.utils;
+package foo.zongzhe.utils.comon;
 
-import foo.zongzhe.common.utils.DateUtil;
+import foo.zongzhe.utils.common.DateUtil;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;

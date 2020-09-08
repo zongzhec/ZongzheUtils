@@ -53,7 +53,7 @@ afterEvaluate { project ->
     }
 }
 
-def localMavenRepo = 'file://' + new File(System.getProperty('user.home'), '.m2/repository').absolutePath
+def localMavenRepo = 'file://Z:\\CodeSpace\\jars'
 
 publishing {
     publications {
