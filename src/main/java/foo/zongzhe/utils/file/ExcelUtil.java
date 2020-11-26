@@ -24,14 +24,9 @@ public class ExcelUtil {
      * @param sheetNum The index number of sheet to read.
      * @throws java.io.IOException when file is unable to parse.
      */
-    public String[][] readExcelValues(String filePath, int sheetNum) throws IOException {
-        ClassLoader classLoader = Thread.currentThread().getContextClassLoader();
-        InputStream is = classLoader.getResourceAsStream(filePath);
-        if (is == null) {
-            is = new FileInputStream(filePath);
-        }
-
-        Workbook wb = new XSSFWorkbook(is);
+    public static String[][] readExcelValues(String filePath, int sheetNum) throws IOException {
+        
+        Workbook wb = getWorkbook(filePath);
         LogUtil.logInfo("Workbook contains sheetNum: " + wb.getNumberOfSheets());
 
         LogUtil.logInfo("Getting info from excel");
@@ -71,21 +66,27 @@ public class ExcelUtil {
     /**
      * Get workbook from file
      *
-     * @param fileName the file to be parsed.
+     * @param filePath the file to be parsed.
      * @throws java.io.IOException when file is unable to parse.
      */
-    public static Workbook getWorkbook(String fileName) throws IOException {
+    public static Workbook getWorkbook(String filePath) throws IOException {
+        ClassLoader classLoader = Thread.currentThread().getContextClassLoader();
+        InputStream is = classLoader.getResourceAsStream(filePath);
+        if (is == null) {
+            is = new FileInputStream(filePath);
+        }
+
         Workbook wb = null;
 //        InputStream is = file.getInputStream();
         // Apply different Workbook basing on different extention
-        String ext = fileName.substring(fileName.indexOf('.') + 1);
+        String ext = filePath.substring(filePath.indexOf('.') + 1);
         LogUtil.logInfo("file ext is: " + ext);
         switch (ext) {
             case XLS:
-                wb = new HSSFWorkbook();
+                wb = new HSSFWorkbook(is);
                 break;
             case XLSX:
-                wb = new XSSFWorkbook();
+                wb = new XSSFWorkbook(is);
                 break;
             default:
                 LogUtil.logError("Invalid file ext.");
