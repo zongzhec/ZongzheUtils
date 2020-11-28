@@ -21,4 +21,16 @@ public class ExcelUtilTest {
             LogUtil.logNextLine();
         }
     }
+
+    @Test
+    public void readWrongExcelValuesTest() throws IOException, InvalidFormatException {
+        ExcelUtil excelUtil = new ExcelUtil();
+        String[][] contents =  excelUtil.readExcelValues("Excel07withWrongName.xls", 0);
+        for (String[] content : contents) {
+            for (String s : content) {
+                System.out.print(s + " | ");
+            }
+            LogUtil.logNextLine();
+        }
+    }
 }

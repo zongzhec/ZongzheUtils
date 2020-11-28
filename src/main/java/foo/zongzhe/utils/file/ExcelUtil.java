@@ -3,14 +3,12 @@ package foo.zongzhe.utils.file;
 import foo.zongzhe.utils.common.LogUtil;
 import foo.zongzhe.utils.common.StringUtil;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
+import org.apache.poi.poifs.filesystem.OfficeXmlFileException;
 import org.apache.poi.ss.usermodel.*;
 
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
+import java.io.*;
 
 public class ExcelUtil {
 
@@ -25,7 +23,7 @@ public class ExcelUtil {
      * @throws java.io.IOException when file is unable to parse.
      */
     public static String[][] readExcelValues(String filePath, int sheetNum) throws IOException {
-        
+
         Workbook wb = getWorkbook(filePath);
         LogUtil.logInfo("Workbook contains sheetNum: " + wb.getNumberOfSheets());
 
@@ -34,7 +32,7 @@ public class ExcelUtil {
         DataFormatter dataFormatter = new DataFormatter();
         Sheet sheet = wb.getSheetAt(sheetNum);
         // Get row number and col number from the sheet
-        int rows = sheet.getLastRowNum() + 1; // rows starts wuith 0
+        int rows = sheet.getLastRowNum() + 1; // rows starts with 0
         int cols = 0;
         for (int i = 0; i < rows; i++) {
             Row row = sheet.getRow(i);
@@ -81,17 +79,20 @@ public class ExcelUtil {
         // Apply different Workbook basing on different extention
         String ext = filePath.substring(filePath.indexOf('.') + 1);
         LogUtil.logInfo("file ext is: " + ext);
-        switch (ext) {
-            case XLS:
-                wb = new HSSFWorkbook(is);
-                break;
-            case XLSX:
-                wb = new XSSFWorkbook(is);
-                break;
-            default:
-                LogUtil.logError("Invalid file ext.");
-        }
 
+        // Try best to decode the file magic
+        try {
+            wb = new HSSFWorkbook(is);
+        } catch (OfficeXmlFileException e1) {
+            is = new FileInputStream(filePath);
+            try {
+                wb = new XSSFWorkbook(is);
+            } catch (IOException e2) {
+                throw new IOException(e2);
+            }
+        } finally {
+            is.close();
+        }
         return wb;
     }
 
